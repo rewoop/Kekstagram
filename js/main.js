@@ -18,14 +18,6 @@ var getLinks = function (amountLinks) {
   return 'photos/' + amountLinks + '.jpg';
 };
 
-var getComments = function (avatar, message, name) {
-  return {
-    avatar: avatar,
-    message: getRandomArrayElem(message),
-    name: getRandomArrayElem(name)
-  };
-};
-
 var getAvatar = function (minAmount, maxAmount) {
   return 'img/avatar-' + getRandomNumber(minAmount, maxAmount) + '.svg';
 };
@@ -41,17 +33,54 @@ var messages = [
 
 var names = ['Игнат', 'Валера', 'Вася', 'Глаша', 'Зоя', 'Эльвира'];
 
+var getComments = function (avatar, message, name) {
+  return {
+    avatar: avatar,
+    message: getRandomArrayElem(message),
+    name: getRandomArrayElem(name)
+  };
+};
+
+var getCommentsCount = function (countComments) {
+  var array = [];
+  for (var i = 0; i < countComments; i++) {
+    array.push(getComments(getAvatar(MIN_AVATARS, MAX_AVATARS), messages, names));
+  }
+  return array;
+};
+
 var getDescriptions = function (url) {
   return {
     url: getLinks(url + 1),
     description: '',
     likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-    comments: getComments(getAvatar(MIN_AVATARS, MAX_AVATARS), messages, names)
+    comments: getCommentsCount(getRandomNumber(1, 3))
   };
 };
 
-var description = [];
+var descriptionArr = [];
 
 for (var j = 0; j < DESCRIPTIONS_AMOUNT; j++) {
-  description.push(getDescriptions(j));
+  descriptionArr.push(getDescriptions(j));
 }
+
+var picture = document.querySelector('#picture').content.querySelector('.picture');
+var picturesContainer = document.querySelector('.pictures');
+
+var setPhotoDescription = function (description) {
+  var photoDescription = picture.cloneNode(true);
+  photoDescription.querySelector('.picture__img').src = description.url;
+  photoDescription.querySelector('.picture__likes').textContent = description.likes;
+  photoDescription.querySelector('.picture__comments').textContent = description.comments.length;
+  return photoDescription;
+};
+
+var createPhotos = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < descriptionArr.length; i++) {
+    fragment.appendChild(setPhotoDescription(descriptionArr[i]));
+  }
+  return picturesContainer.appendChild(fragment);
+};
+
+createPhotos();
