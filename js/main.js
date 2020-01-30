@@ -14,15 +14,15 @@ var getRandomNumber = function (minAmount, maxAmount) {
   return Math.round(Math.random() * (maxAmount - minAmount) + minAmount);
 };
 
-var getLinks = function (amountLinks) {
+var createLink = function (amountLinks) {
   return 'photos/' + amountLinks + '.jpg';
 };
 
-var getAvatar = function (minAmount, maxAmount) {
+var createAvatarLink = function (minAmount, maxAmount) {
   return 'img/avatar-' + getRandomNumber(minAmount, maxAmount) + '.svg';
 };
 
-var messages = [
+var MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -31,9 +31,9 @@ var messages = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?! '
 ];
 
-var names = ['Игнат', 'Валера', 'Вася', 'Глаша', 'Зоя', 'Эльвира'];
+var NAMES = ['Игнат', 'Валера', 'Вася', 'Глаша', 'Зоя', 'Эльвира'];
 
-var getComments = function (avatar, message, name) {
+var createComment = function (avatar, message, name) {
   return {
     avatar: avatar,
     message: getRandomArrayElem(message),
@@ -41,27 +41,27 @@ var getComments = function (avatar, message, name) {
   };
 };
 
-var getCommentsCount = function (countComments) {
+var createCommentsArray = function (countComments) {
   var array = [];
   for (var i = 0; i < countComments; i++) {
-    array.push(getComments(getAvatar(MIN_AVATARS, MAX_AVATARS), messages, names));
+    array.push(createComment(createAvatarLink(MIN_AVATARS, MAX_AVATARS), MESSAGES, NAMES));
   }
   return array;
 };
 
-var getDescriptions = function (url) {
+var createDescription = function (url) {
   return {
-    url: getLinks(url + 1),
+    url: createLink(url + 1),
     description: '',
     likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-    comments: getCommentsCount(getRandomNumber(1, 3))
+    comments: createCommentsArray(getRandomNumber(1, 3))
   };
 };
 
-var descriptionArr = [];
+var descriptionsArr = [];
 
 for (var j = 0; j < DESCRIPTIONS_AMOUNT; j++) {
-  descriptionArr.push(getDescriptions(j));
+  descriptionsArr.push(createDescription(j));
 }
 
 var picture = document.querySelector('#picture').content.querySelector('.picture');
@@ -77,8 +77,8 @@ var setPhotoDescription = function (description) {
 
 var createPhotos = function () {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < descriptionArr.length; i++) {
-    fragment.appendChild(setPhotoDescription(descriptionArr[i]));
+  for (var i = 0; i < descriptionsArr.length; i++) {
+    fragment.appendChild(setPhotoDescription(descriptionsArr[i]));
   }
   return picturesContainer.appendChild(fragment);
 };
