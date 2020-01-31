@@ -50,7 +50,7 @@ var createCommentsArray = function (countComments) {
 var createDescription = function (url) {
   return {
     url: createLink(url + 1),
-    description: '',
+    description: 'Кайфуем',
     likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
     comments: createCommentsArray(getRandomNumber(1, 3))
   };
@@ -82,3 +82,21 @@ var renderPhotos = function () {
 };
 
 renderPhotos();
+
+var bigPicture = document.querySelector('.big-picture');
+
+var renderBigPicture = function (picture) {
+  bigPicture.classList.remove('hidden');
+
+  bigPicture.querySelector('img').src = picture.url;
+  bigPicture.querySelector('.likes-count').textContent = picture.likes;
+  bigPicture.querySelector('.comments-count').textContent = picture.comments.length;
+
+  bigPicture.querySelector('.social__caption').textContent = picture.description;
+};
+
+bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+bigPicture.querySelector('.comments-loader').classList.add('hidden');
+document.body.classList.add('modal-open');
+
+renderBigPicture(descriptionsArr[0]);
