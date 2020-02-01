@@ -58,9 +58,13 @@ var createDescription = function (url) {
 
 var descriptionsArr = [];
 
-for (var j = 0; j < DESCRIPTIONS_AMOUNT; j++) {
-  descriptionsArr.push(createDescription(j));
-}
+var makeDescription = function () {
+  for (var i = 0; i < DESCRIPTIONS_AMOUNT; i++) {
+    descriptionsArr.push(createDescription(i));
+  }
+};
+
+makeDescription();
 
 var picture = document.querySelector('#picture').content.querySelector('.picture');
 var picturesContainer = document.querySelector('.pictures');
@@ -85,17 +89,11 @@ renderPhotos();
 
 var bigPicture = document.querySelector('.big-picture');
 var commentsList = document.querySelector('.social__comments');
-var commentItem = commentsList.querySelectorAll('.social__comment');
-
-var removeDefaultComments = function (defaultComments) {
-  for (var i = 0; i < defaultComments.length; i++) {
-    defaultComments[i].remove();
-  }
-};
+var commentItem = commentsList.querySelector('.social__comment');
+commentsList.innerHTML = '';
 
 var getComments = function (photo) {
-  removeDefaultComments(commentItem);
-  var comment = commentItem[0].cloneNode(true);
+  var comment = commentItem.cloneNode(true);
   comment.querySelector('.social__picture').src = photo.avatar;
   comment.querySelector('.social__picture').alt = photo.name;
   comment.querySelector('.social__text').textContent = photo.message;
