@@ -50,7 +50,7 @@ var createCommentsArray = function (countComments) {
 var createDescription = function (url) {
   return {
     url: createLink(url + 1),
-    description: '',
+    description: 'Кайфуем',
     likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
     comments: createCommentsArray(getRandomNumber(1, 3))
   };
@@ -58,9 +58,13 @@ var createDescription = function (url) {
 
 var descriptionsArr = [];
 
-for (var j = 0; j < DESCRIPTIONS_AMOUNT; j++) {
-  descriptionsArr.push(createDescription(j));
-}
+var makeDescription = function () {
+  for (var i = 0; i < DESCRIPTIONS_AMOUNT; i++) {
+    descriptionsArr.push(createDescription(i));
+  }
+};
+
+makeDescription();
 
 var picture = document.querySelector('#picture').content.querySelector('.picture');
 var picturesContainer = document.querySelector('.pictures');
@@ -82,3 +86,39 @@ var renderPhotos = function () {
 };
 
 renderPhotos();
+
+var bigPicture = document.querySelector('.big-picture');
+var commentsList = document.querySelector('.social__comments');
+var commentItem = commentsList.querySelector('.social__comment');
+commentsList.innerHTML = '';
+
+var getComments = function (photo) {
+  var comment = commentItem.cloneNode(true);
+  comment.querySelector('.social__picture').src = photo.avatar;
+  comment.querySelector('.social__picture').alt = photo.name;
+  comment.querySelector('.social__text').textContent = photo.message;
+  return comment;
+};
+
+var makeComments = function (photoComments) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < photoComments.comments.length; i++) {
+    fragment.appendChild(getComments(photoComments.comments[i]));
+  }
+  return commentsList.appendChild(fragment);
+};
+
+var renderBigPicture = function (picturesArray) {
+  bigPicture.classList.remove('hidden');
+  bigPicture.querySelector('img').src = picturesArray.url;
+  bigPicture.querySelector('.likes-count').textContent = picturesArray.likes;
+  bigPicture.querySelector('.comments-count').textContent = picturesArray.comments.length;
+  makeComments(picturesArray);
+  bigPicture.querySelector('.social__caption').textContent = picturesArray.description;
+};
+
+bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+bigPicture.querySelector('.comments-loader').classList.add('hidden');
+document.body.classList.add('modal-open');
+
+renderBigPicture(descriptionsArr[0]);
