@@ -14,6 +14,9 @@ var MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?! '
 ];
+var ESC_KEY = 'Escape';
+var ENTER_KEY = 'Enter';
+
 
 var getRandomArrayElem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -109,7 +112,6 @@ var makeComments = function (photoComments) {
 };
 
 var renderBigPicture = function (picturesArray) {
-  bigPicture.classList.remove('hidden');
   bigPicture.querySelector('img').src = picturesArray.url;
   bigPicture.querySelector('.likes-count').textContent = picturesArray.likes;
   bigPicture.querySelector('.comments-count').textContent = picturesArray.comments.length;
@@ -119,6 +121,75 @@ var renderBigPicture = function (picturesArray) {
 
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
-document.body.classList.add('modal-open');
 
 renderBigPicture(descriptionsArr[0]);
+
+var escapeKeydownHandler = function (evt) {
+  if (evt.key === ESC_KEY) {
+    closePictureClickHandler();
+  }
+};
+
+var openPictureClickHandler = function () {
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', escapeKeydownHandler);
+};
+
+var closePictureClickHandler = function () {
+  bigPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', escapeKeydownHandler);
+};
+
+var pictureItem = picturesContainer.querySelectorAll('.picture');
+var pictureCloseButton = bigPicture.querySelector('.cancel');
+
+pictureItem[0].addEventListener('click', openPictureClickHandler);
+
+pictureCloseButton.addEventListener('click', closePictureClickHandler);
+pictureCloseButton.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    closePictureClickHandler();
+  }
+});
+
+var uploadFile = picturesContainer.querySelector('#upload-file');
+var imgUploadOverlay = picturesContainer.querySelector('.img-upload__overlay');
+var imgUploadOverlayCloseButton = picturesContainer.querySelector('.cancel');
+
+var escapePictureOverlayKeydownHandler = function (evt) {
+  if (evt.key === ESC_KEY) {
+    uploadFileCloseChangeHandler();
+  }
+};
+
+var uploadFileChangeHandler = function () {
+  imgUploadOverlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+};
+
+var uploadFileCloseChangeHandler = function () {
+  imgUploadOverlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+};
+
+uploadFile.addEventListener('change', uploadFileChangeHandler);
+
+imgUploadOverlayCloseButton.addEventListener('click', uploadFileCloseChangeHandler);
+imgUploadOverlayCloseButton.addEventListener('click', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    uploadFileCloseChangeHandler();
+  }
+});
+
+// var effectLevelValue = picturesContainer.querySelector('.effect-level__value');
+// var effectLevelLine = picturesContainer.querySelector('.effect-level__line');
+// var effectLevelPin = picturesContainer.querySelector('.effect-level__pin');
+// var effectLevelDepth = picturesContainer.querySelector('.effect-level__depth');
+//
+// effectLevelPin.addEventListener('mouseup', function () {
+//   effectLevelLine.offsetWidth;
+// });
