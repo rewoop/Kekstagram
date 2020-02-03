@@ -16,6 +16,7 @@ var MESSAGES = [
 ];
 var ESC_KEY = 'Escape';
 var ENTER_KEY = 'Enter';
+var SPACE_HASHTAG_SEPARATOR = ' ';
 
 
 var getRandomArrayElem = function (array) {
@@ -193,3 +194,23 @@ imgUploadOverlayCloseButton.addEventListener('click', function (evt) {
 // effectLevelPin.addEventListener('mouseup', function () {
 //   effectLevelLine.offsetWidth;
 // });
+
+var hashtagInput = picturesContainer.querySelector('.text__hashtags');
+var hashtagsArr = [];
+
+var stringToArray = function (stringToSplit, separator) {
+  return stringToSplit.split(separator);
+};
+
+hashtagInput.addEventListener('change', function () {
+  hashtagsArr.push(stringToArray(hashtagInput.value, SPACE_HASHTAG_SEPARATOR));
+});
+
+// var hashtagValidate = function (hashtag) {
+//   for (var i = 0; i < hashtag.length; i++) {
+//
+//   }
+// };
+//
+//
+// hashtagValidate(hashtagsArr);
