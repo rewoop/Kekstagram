@@ -214,3 +214,18 @@ hashtagInput.addEventListener('change', function () {
 //
 //
 // hashtagValidate(hashtagsArr);
+
+// if (hashtagInput[i].value.substr(0, 1) !== '#') { // Начало хэш-тега с символа #
+//   // setCustomValidity
+// } else if (hashtagInput[i].value.length < 2 && hashtagInput[i].value.length > 20) { // хеш-тег не может состоять только из одной решётки и быть больше 20 символов;
+//   // setCustomValidity
+// } else if (hashtagInput.length > 5) { // нельзя указать больше пяти хэш-тегов;
+//   // setCustomValidity
+// }
+//
+// hashtagInput.addEventListener('focus', function () {
+//   document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+// });
+// hashtagInput.addEventListener('blur', function () {
+//   document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+// });
