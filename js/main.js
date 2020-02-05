@@ -263,10 +263,12 @@ changeFilters();
 //   return stringToSplit.split(separator);
 // };
 //
+//ЗАПИСЬ РЕГУЛЯРКИ /(^|\B)#([a-zA-Z0-9А-Яа-я]{1,19})(\b|\r)/gui
+
 // var onHashtagChange = function () {
 //   //здесь надо писать регулярку на проверку хэш-тегов
 //   // Например:
-//   // if (hashtagsArr > 1) {
+//   // if (hashtagsArr[i] > 1) {
 //   //   hashtagInput.setCustomValidity('lalalal');
 //   // }
 //   // И так далее
