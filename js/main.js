@@ -256,33 +256,46 @@ changeFilters();
 // Конец модуля сброса эффектов при смене фильтра
 
 // Начало модуля валидации хэштегов
-// var hashtagInput = picturesContainer.querySelector('.text__hashtags');
-// var hashtagsArr = [];
-//
-// var stringToArray = function (stringToSplit, separator) {
-//   return stringToSplit.split(separator);
-// };
-//
-//ЗАПИСЬ РЕГУЛЯРКИ /(^|\B)#([a-zA-Z0-9А-Яа-я]{1,19})(\b|\r)/gui
+var hashtagInput = picturesContainer.querySelector('.text__hashtags');
+var hashtagsArr = [];
+var regExp = new RegExp('(^|\B)#([a-zA-Z0-9А-ЯЁа-яё]{1,19})', 'u');
+var regExpSymbols = /[\.\,\-\_\'\"\@\?\!\:\$\*\/\%\^\&\+\;\[\]\{\}\|\\ ()]/;
+var regExpSymbolLattice = /[\#]/;
 
-// var onHashtagChange = function () {
-//   //здесь надо писать регулярку на проверку хэш-тегов
-//   // Например:
-//   // if (hashtagsArr[i] > 1) {
-//   //   hashtagInput.setCustomValidity('lalalal');
-//   // }
-//   // И так далее
-// };
-//
-// var validateHashtag = function () {
-//   hashtagInput.addEventListener('change', function () {
-//     hashtagsArr = stringToArray(hashtagInput.value, SPACE_HASHTAG_SEPARATOR);
-//
-//     for (var i = 0; i < hashtagsArr.length; i++) {
-//       hashtagInput.addEventListener('input', onHashtagChange) //Спорная функция!!!
-//     }
-//   });
-// };
-//
-// validateHashtag();
+var stringToArray = function (stringToSplit, separator) {
+  return stringToSplit.split(separator);
+};
+
+var checkHashtagsArrayDuplicate = function (hashtags) {
+  return hashtags.some(function (item) {
+    return hashtags.indexOf(item) !== hashtags.lastIndexOf(item);
+  });
+};
+
+var validateHashtag = function () {
+  hashtagInput.addEventListener('input', function () {
+    hashtagsArr = stringToArray(hashtagInput.value, SPACE_HASHTAG_SEPARATOR);
+    for (var i = 0; i < hashtagsArr.length; i++) {
+      var isHashtagValid = regExp.test(hashtagsArr[i]);
+      var isHashtagHaveSymbols = regExpSymbols.test(hashtagsArr[i]);
+      var isLatticeDuplicated = regExpSymbolLattice.test(hashtagsArr[i].substring(1));
+      hashtagsArr[i] = hashtagsArr[i].toLowerCase();
+      var isHashtagDuplicated = checkHashtagsArrayDuplicate(hashtagsArr);
+
+      if (!(isHashtagValid) || isHashtagHaveSymbols || hashtagsArr.length > 5 || isLatticeDuplicated || isHashtagDuplicated) {
+        hashtagInput.setCustomValidity('Правила заполнения поля хэш-тегов: Хэш-тег должен начинаться с символа # (решётка); Строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.; Хэш-тег не может состоять только из одной решётки; Максимальная длина одного хэш-тега 20 символов, включая решётку; Хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом; Хэш-теги разделяются пробелами; Один и тот же хэш-тег не может быть использован дважды; Нельзя указать больше пяти хэш-тегов;');
+      } else {
+        hashtagInput.setCustomValidity('');
+      }
+    }
+  });
+  hashtagInput.addEventListener('focus', function () {
+    document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+  });
+  hashtagInput.addEventListener('blur', function () {
+    document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+  });
+};
+
+validateHashtag();
 // Конец модуля валидации хэштегов
