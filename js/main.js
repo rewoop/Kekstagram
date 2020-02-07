@@ -106,6 +106,7 @@ var getComments = function (photo) {
 };
 
 var makeComments = function (photoComments) {
+  commentsList.innerHTML = '';
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < photoComments.comments.length; i++) {
     fragment.appendChild(getComments(photoComments.comments[i]));
@@ -124,15 +125,15 @@ var renderBigPicture = function (picturesArray) {
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
 
-renderBigPicture(descriptionsArr[0]);
-
 var onEscapeKeydown = function (evt) {
   if (evt.key === ESC_KEY) {
     onClosePictureClick();
   }
 };
 
-var onOpenPictureClick = function () {
+var onOpenPictureClick = function (evt, index) {
+  evt.preventDefault();
+  renderBigPicture(descriptionsArr[index]);
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onEscapeKeydown);
@@ -147,7 +148,16 @@ var onClosePictureClick = function () {
 var pictureItem = picturesContainer.querySelectorAll('.picture');
 var pictureCloseButton = bigPicture.querySelector('.cancel');
 
-pictureItem[0].addEventListener('click', onOpenPictureClick);
+var chooseBigPicture = function () {
+  pictureItem.forEach(function (item, index) {
+    item.addEventListener('click', function (evt) {
+      onOpenPictureClick(evt, index);
+    });
+  });
+};
+
+chooseBigPicture();
+// renderBigPicture(descriptionsArr[0]);
 
 pictureCloseButton.addEventListener('click', onClosePictureClick);
 pictureCloseButton.addEventListener('keydown', function (evt) {
@@ -257,6 +267,7 @@ changeFilters();
 
 // Начало модуля валидации хэштегов
 var hashtagInput = picturesContainer.querySelector('.text__hashtags');
+var photoTextArea = picturesContainer.querySelector('.text__description');
 var hashtagsArr = [];
 var regExp = new RegExp('(^|\B)#([a-zA-Z0-9А-ЯЁа-яё]{1,19})', 'u');
 var regExpSymbols = /[\.\,\-\_\'\"\@\?\!\:\$\*\/\%\^\&\+\;\[\]\{\}\|\\ ()]/;
@@ -296,6 +307,13 @@ var validateHashtag = function () {
     document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
   });
 };
+
+photoTextArea.addEventListener('focus', function () {
+  document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+});
+photoTextArea.addEventListener('blur', function () {
+  document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+});
 
 validateHashtag();
 // Конец модуля валидации хэштегов
