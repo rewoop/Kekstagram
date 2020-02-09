@@ -315,10 +315,10 @@ var validateHashtag = function () {
 };
 
 photoTextArea.addEventListener('focus', function () {
-  document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+  document.removeEventListener('keydown', onEscapePictureOverlayKeydown);
 });
 photoTextArea.addEventListener('blur', function () {
-  document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+  document.addEventListener('keydown', onEscapePictureOverlayKeydown);
 });
 
 validateHashtag();
