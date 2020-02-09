@@ -19,6 +19,9 @@ var ENTER_KEY = 'Enter';
 var SPACE_HASHTAG_SEPARATOR = ' ';
 var DEFAULT_EFFECT_PIN_POSITION = '20%';
 var DEFAULT_EFFECT_LEVEL_VALUE = 10;
+var REG_EXP = /(^|\B)#([a-zA-Z0-9А-ЯЁа-яё]{1,19})/;
+var REG_EXP_SYMBOLS = /\W[^a-zA-Z0-9А-ЯЁа-яё]/;
+var REG_EXP_SYMBOL_LATTICE = /[\#]/;
 
 var getRandomArrayElem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -160,7 +163,7 @@ var uploadFile = picturesContainer.querySelector('#upload-file');
 var imgUploadOverlay = picturesContainer.querySelector('.img-upload__overlay');
 var imgUploadOverlayCloseButton = picturesContainer.querySelector('.cancel');
 
-var escapePictureOverlayKeydownHandler = function (evt) {
+var onEscapePictureOverlayKeydown = function (evt) {
   if (evt.key === ESC_KEY) {
     onUploadFileCloseChange();
   }
@@ -169,13 +172,13 @@ var escapePictureOverlayKeydownHandler = function (evt) {
 var onUploadFileChange = function () {
   imgUploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+  document.addEventListener('keydown', onEscapePictureOverlayKeydown);
 };
 
 var onUploadFileCloseChange = function () {
   imgUploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+  document.removeEventListener('keydown', onEscapePictureOverlayKeydown);
   uploadFile.value = '';
 };
 
@@ -258,9 +261,6 @@ changeFilters();
 // Начало модуля валидации хэштегов
 var hashtagInput = picturesContainer.querySelector('.text__hashtags');
 var hashtagsArr = [];
-var regExp = new RegExp('(^|\B)#([a-zA-Z0-9А-ЯЁа-яё]{1,19})', 'u');
-var regExpSymbols = /[\.\,\-\_\'\"\@\?\!\:\$\*\/\%\^\&\+\;\[\]\{\}\|\\ ()]/;
-var regExpSymbolLattice = /[\#]/;
 
 var stringToArray = function (stringToSplit, separator) {
   return stringToSplit.split(separator);
@@ -275,25 +275,31 @@ var checkHashtagsArrayDuplicate = function (hashtags) {
 var validateHashtag = function () {
   hashtagInput.addEventListener('input', function () {
     hashtagsArr = stringToArray(hashtagInput.value, SPACE_HASHTAG_SEPARATOR);
-    for (var i = 0; i < hashtagsArr.length; i++) {
-      var isHashtagValid = regExp.test(hashtagsArr[i]);
-      var isHashtagHaveSymbols = regExpSymbols.test(hashtagsArr[i]);
-      var isLatticeDuplicated = regExpSymbolLattice.test(hashtagsArr[i].substring(1));
-      hashtagsArr[i] = hashtagsArr[i].toLowerCase();
+    hashtagsArr.forEach(function (item) {
+      var isHashtagValid = REG_EXP.test(item);
+      var isHashtagHaveSymbols = REG_EXP_SYMBOLS.test(item);
+      var isLatticeDuplicated = REG_EXP_SYMBOL_LATTICE.test(item.substring(1));
+      item = item.toLowerCase();
       var isHashtagDuplicated = checkHashtagsArrayDuplicate(hashtagsArr);
 
-      if (!(isHashtagValid) || isHashtagHaveSymbols || hashtagsArr.length > 5 || isLatticeDuplicated || isHashtagDuplicated) {
-        hashtagInput.setCustomValidity('Правила заполнения поля хэш-тегов: Хэш-тег должен начинаться с символа # (решётка); Строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.; Хэш-тег не может состоять только из одной решётки; Максимальная длина одного хэш-тега 20 символов, включая решётку; Хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом; Хэш-теги разделяются пробелами; Один и тот же хэш-тег не может быть использован дважды; Нельзя указать больше пяти хэш-тегов;');
+      if (isHashtagHaveSymbols || isLatticeDuplicated) {
+        hashtagInput.setCustomValidity('Строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
+      } else if (!(isHashtagValid)) {
+        hashtagInput.setCustomValidity('Хэш-тег должен начинаться с символа # (решётка); Хэш-тег не может состоять только из одной решётки; Максимальная длина одного хэш-тега 20 символов, включая решётку; Хэш-теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом; Хэш-теги разделяются пробелами.');
+      } else if (hashtagsArr.length > 5) {
+        hashtagInput.setCustomValidity('Нельзя указать больше пяти хэш-тегов.');
+      } else if (isHashtagDuplicated) {
+        hashtagInput.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
       } else {
         hashtagInput.setCustomValidity('');
       }
-    }
+    });
   });
   hashtagInput.addEventListener('focus', function () {
-    document.removeEventListener('keydown', escapePictureOverlayKeydownHandler);
+    document.removeEventListener('keydown', onEscapePictureOverlayKeydown);
   });
   hashtagInput.addEventListener('blur', function () {
-    document.addEventListener('keydown', escapePictureOverlayKeydownHandler);
+    document.addEventListener('keydown', onEscapePictureOverlayKeydown);
   });
 };
 
