@@ -2,8 +2,6 @@
 
 (function () {
   var DEFAULT_PIN_VALUE = 0.2;
-  var DEFAULT_EFFECT_PIN_POSITION = '20%';
-  var DEFAULT_EFFECT_LEVEL_VALUE = 10;
 
   var effectLevel = document.querySelector('.effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
@@ -60,9 +58,9 @@
   });
 
   var resetSliderValue = function () {
-    effectLevelPin.style.left = DEFAULT_EFFECT_PIN_POSITION;
-    effectLevelDepth.style.width = DEFAULT_EFFECT_PIN_POSITION;
-    effectLevelValue.value = DEFAULT_EFFECT_LEVEL_VALUE;
+    effectLevelPin.style = '';
+    effectLevelDepth.style.width = '';
+    effectLevelValue.value = '';
   };
 
   var removeFilters = function () {
