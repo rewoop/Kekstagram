@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var DEFAULT_PIN_VALUE = 0.2;
-
   var effectLevel = document.querySelector('.effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
@@ -13,7 +11,7 @@
   var pictureDiv = document.querySelector('.img-upload__preview');
   var picture = pictureDiv.querySelector('img');
 
-  var pinValue = DEFAULT_PIN_VALUE;
+  var pinValue = 0.2;
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -37,11 +35,8 @@
       if (!(pinX < 0 || pinX > effectLevelLine.offsetWidth)) {
         effectLevelPin.style.left = (pinX) + 'px';
 
-        var PIN_VALUE_BLUR = (pinX * 3) / effectLevelLine.offsetWidth;
-        var PIN_VALUE_BRIGHTNESS = ((pinX + 453) * 2 / effectLevelLine.offsetWidth) - 1;
-
         pinValue = pinX / effectLevelLine.offsetWidth;
-        getFilterValue(pinValue, PIN_VALUE_BLUR, PIN_VALUE_BRIGHTNESS);
+        getFilterValue(pinValue);
         effectLevelValue.value = Math.round(pinValue * 100);
         effectLevelDepth.style.width = pinValue * 100 + '%';
       }
@@ -84,13 +79,18 @@
     }
   };
 
-  var getFilterValue = function (currentPinValue, currentPinValueBlur, currentPinValueBrightness) {
+  var getPinValueRange = function (pinValue, minAmount, maxAmount) {
+    return pinValue * (maxAmount - minAmount) + minAmount;
+  };
+
+  var getFilterValue = function (currentPinValue) {
     if (radioFilters[0].checked) {
       removeFilters();
     } else if (radioFilters[1].checked) {
       removeFilters();
       picture.classList.add('effects__preview--chrome');
       picture.style.filter = 'grayscale(' + currentPinValue + ')';
+            console.log(getPinValueRange(currentPinValue, 1, 3));
     } else if (radioFilters[2].checked) {
       removeFilters();
       picture.classList.add('effects__preview--sepia');
@@ -102,11 +102,11 @@
     } else if (radioFilters[4].checked) {
       removeFilters();
       picture.classList.add('effects__preview--phobos');
-      picture.style.filter = 'blur(' + currentPinValueBlur + 'px)';
+      picture.style.filter = 'blur(' + getPinValueRange(currentPinValue, 0, 3) + 'px)';
     } else if (radioFilters[5].checked) {
       removeFilters();
       picture.classList.add('effects__preview--heat');
-      picture.style.filter = 'brightness(' + currentPinValueBrightness + ')';
+      picture.style.filter = 'brightness(' + getPinValueRange(currentPinValue, 1, 3) + ')';
     }
   };
   changeFilters();
