@@ -79,8 +79,8 @@
     }
   };
 
-  var getPinValueRange = function (pinValue, minAmount, maxAmount) {
-    return pinValue * (maxAmount - minAmount) + minAmount;
+  var getPinValueRange = function (pinValueNumber, minAmount, maxAmount) {
+    return pinValueNumber * (maxAmount - minAmount) + minAmount;
   };
 
   var getFilterValue = function (currentPinValue) {
@@ -90,7 +90,6 @@
       removeFilters();
       picture.classList.add('effects__preview--chrome');
       picture.style.filter = 'grayscale(' + currentPinValue + ')';
-            console.log(getPinValueRange(currentPinValue, 1, 3));
     } else if (radioFilters[2].checked) {
       removeFilters();
       picture.classList.add('effects__preview--sepia');
@@ -110,4 +109,8 @@
     }
   };
   changeFilters();
+
+  window.slider = {
+    picture: picture
+  };
 })();
