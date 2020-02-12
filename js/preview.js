@@ -19,9 +19,9 @@
   var makeComments = function (photoComments) {
     commentsList.innerHTML = '';
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photoComments.comments.length; i++) {
-      fragment.appendChild(getComments(photoComments.comments[i]));
-    }
+    photoComments.comments.forEach(function (item) {
+      fragment.appendChild(getComments(item));
+    });
     return commentsList.appendChild(fragment);
   };
 
