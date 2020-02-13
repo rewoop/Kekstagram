@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
-
   var bigPicture = document.querySelector('.big-picture');
   var commentsList = document.querySelector('.social__comments');
   var commentItem = commentsList.querySelector('.social__comment');
@@ -37,7 +34,7 @@
   bigPicture.querySelector('.comments-loader').classList.add('hidden');
 
   var onEscapeKeydown = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === window.constants.ESC_KEY) {
       onClosePictureClick();
     }
   };
@@ -72,13 +69,8 @@
 
   pictureCloseButton.addEventListener('click', onClosePictureClick);
   pictureCloseButton.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (evt.key === window.constants.ENTER_KEY) {
       onClosePictureClick();
     }
   });
-
-  window.preview = {
-    ESC_KEY: ESC_KEY,
-    ENTER_KEY: ENTER_KEY
-  };
 })();
