@@ -53,19 +53,16 @@
     document.removeEventListener('keydown', onEscapeKeydown);
   };
 
-  var pictureItem = window.gallery.picturesContainer.querySelectorAll('.picture');
   var pictureCloseButton = bigPicture.querySelector('.cancel');
 
-  var chooseBigPicture = function () {
+  var chooseBigPicture = function (pictureItem) {
     pictureItem.forEach(function (item, index) {
       item.addEventListener('click', function (evt) {
+        evt.preventDefault();
         onOpenPictureClick(evt, index);
       });
     });
   };
-
-  chooseBigPicture();
-
 
   pictureCloseButton.addEventListener('click', onClosePictureClick);
   pictureCloseButton.addEventListener('keydown', function (evt) {
@@ -73,4 +70,8 @@
       onClosePictureClick();
     }
   });
+
+  window.preview = {
+    chooseBigPicture: chooseBigPicture
+  };
 })();
