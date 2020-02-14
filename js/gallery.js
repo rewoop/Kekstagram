@@ -12,15 +12,27 @@
     return photoDescription;
   };
 
-  var renderPhotos = function () {
+  var successHandler = function (photos) {
     var fragment = document.createDocumentFragment();
-    window.data.descriptionsArr.forEach(function (item) {
+    photos.forEach(function (item) {
       fragment.appendChild(getPhoto(item));
     });
-    return picturesContainer.appendChild(fragment);
+    picturesContainer.appendChild(fragment);
+    window.preview.chooseBigPicture(picturesContainer.querySelectorAll('.picture'));
   };
 
-  renderPhotos();
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.load(successHandler, errorHandler);
 
   window.gallery = {
     picturesContainer: picturesContainer
