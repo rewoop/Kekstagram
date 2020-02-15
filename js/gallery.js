@@ -35,7 +35,6 @@
   window.backend.load(successHandler, errorHandler);
 
   window.gallery = {
-    picturesContainer: picturesContainer,
-    errorHandler: errorHandler
+    picturesContainer: picturesContainer
   };
 })();
