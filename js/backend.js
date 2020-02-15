@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // var URL_POST = 'https://js.dump.academy/kekstagram';
+  var URL_POST = 'https://js.dump.academy/kekstagram';
   var URL_GET = 'https://js.dump.academy/kekstagram/data';
   var StatusCode = {
     OK: 200
@@ -36,18 +36,18 @@
     xhr.send();
   };
 
-  // var save = function (data, onLoad, onError) {
-  //   var xhr = new XMLHttpRequest();
-  //   xhr.responseType = 'json';
-  //
-  //   loadAndErrorHandlers(xhr, onLoad, onError);
-  //
-  //   xhr.open('POST', URL_POST);
-  //   xhr.send(data);
-  // };
+  var save = function (data, onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    loadAndErrorHandlers(xhr, onLoad, onError);
+
+    xhr.open('POST', URL_POST);
+    xhr.send(data);
+  };
 
   window.backend = {
     load: load,
-    // save: save
+    save: save
   };
 })();
