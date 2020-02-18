@@ -3,6 +3,10 @@
 (function () {
   var picture = document.querySelector('#picture').content.querySelector('.picture');
   var picturesContainer = document.querySelector('.pictures');
+  var main = document.querySelector('main');
+  var errorPopup = document.querySelector('#error').content.querySelector('.error');
+  var errorTitle = errorPopup.querySelector('.error__title');
+  var errorBtn = errorPopup.querySelector('.error__button');
 
   var getPhoto = function (description) {
     var photoDescription = picture.cloneNode(true);
@@ -22,19 +26,24 @@
   };
 
   var errorHandler = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+    errorTitle.textContent = errorMessage;
+    errorBtn.textContent = 'Попробуйте снова';
+    main.appendChild(errorPopup);
+
+    errorBtn.addEventListener('click', function () {
+      main.removeChild(errorPopup);
+      setTimeout(function () {
+        window.backend.load(successHandler, errorHandler);
+      }, 300);
+    });
   };
 
   window.backend.load(successHandler, errorHandler);
 
   window.gallery = {
-    picturesContainer: picturesContainer
+    picturesContainer: picturesContainer,
+    main: main,
+    errorPopup: errorPopup,
+    errorBtn: errorBtn
   };
 })();

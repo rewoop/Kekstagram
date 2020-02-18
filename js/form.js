@@ -20,11 +20,11 @@
   var form = document.querySelector('.img-upload__form');
   var hashtag = window.gallery.picturesContainer.querySelector('.text__hashtags');
   var comment = window.gallery.picturesContainer.querySelector('.text__description');
-  var main = document.querySelector('main');
+  var main = window.gallery.main;
   var successMessage = document.querySelector('#success').content.querySelector('.success');
   var successBtn = successMessage.querySelector('.success__button');
-  var errorMessage = document.querySelector('#error').content.querySelector('.error');
-  var errorBtn = errorMessage.querySelector('.error__button');
+  var errorMessage = window.gallery.errorPopup;
+  var errorBtn = window.gallery.errorBtn;
 
   var onEscapePictureOverlayKeydown = function (evt) {
     if (evt.key === window.constants.ESC_KEY) {

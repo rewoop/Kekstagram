@@ -17,10 +17,10 @@
       }
     });
     request.addEventListener('error', function () {
-      error('Произошла ошибка соединения');
+      error('Ошибка загрузки фотографий');
     });
     request.addEventListener('timeout', function () {
-      error('Запрос не успел выполниться за ' + request.timeout + 'мс');
+      error('Фотографии не успели загрузиться за ' + request.timeout + 'мс');
     });
 
     request.timeout = TIMEOUT_IN_MS;
