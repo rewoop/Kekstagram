@@ -27,6 +27,7 @@
 
   var errorHandler = function (errorMessage) {
     errorTitle.textContent = errorMessage;
+    errorTitle.style.lineHeight = '1.15';
     errorBtn.textContent = 'Попробуйте снова';
     main.appendChild(errorPopup);
 

@@ -32,7 +32,10 @@
         item = item.toLowerCase();
         var isHashtagDuplicated = checkHashtagsArrayDuplicate(hashtagsArr);
 
-        if (isHashtagHaveSymbols || isLatticeDuplicated) {
+        if (hashtagInput.value === '') {
+          hashtagInput.setCustomValidity('');
+          hashtagInput.style.border = '';
+        } else if (isHashtagHaveSymbols || isLatticeDuplicated) {
           hashtagInput.setCustomValidity('Строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
           hashtagInput.style.border = INVALID_INPUT_STYLE;
         } else if (!(isHashtagValid)) {
