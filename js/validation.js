@@ -32,15 +32,16 @@
         item = item.toLowerCase();
         var isHashtagDuplicated = checkHashtagsArrayDuplicate(hashtagsArr);
 
-        if (hashtagInput.value === '') {
-          hashtagInput.setCustomValidity('');
-          hashtagInput.style.border = '';
-        } else if (isHashtagHaveSymbols || isLatticeDuplicated) {
+        if (isHashtagHaveSymbols || isLatticeDuplicated) {
           hashtagInput.setCustomValidity('Строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
           hashtagInput.style.border = INVALID_INPUT_STYLE;
         } else if (!(isHashtagValid)) {
           hashtagInput.setCustomValidity('Хэш-тег должен начинаться с символа # и не может состоять только из одной решётки; Максимальная длина одного хэш-тега 20 символов, включая решётку; Хэш-теги разделяются пробелами.');
           hashtagInput.style.border = INVALID_INPUT_STYLE;
+          if (hashtagInput.value === '') {
+            hashtagInput.setCustomValidity('');
+            hashtagInput.style.border = '';
+          }
         } else if (hashtagsArr.length > MAX_HASHTAGS_AMOUNT) {
           hashtagInput.setCustomValidity('Нельзя указать больше пяти хэш-тегов.');
           hashtagInput.style.border = INVALID_INPUT_STYLE;
