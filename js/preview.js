@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var MAX_COMMENTS_LENGTH = 5;
+
   var bigPicture = document.querySelector('.big-picture');
   var commentsList = document.querySelector('.social__comments');
   var commentItem = commentsList.querySelector('.social__comment');
@@ -16,9 +18,12 @@
   var makeComments = function (photoComments) {
     commentsList.innerHTML = '';
     var fragment = document.createDocumentFragment();
-    photoComments.comments.forEach(function (item) {
-      fragment.appendChild(getComments(item));
-    });
+    for (var i = 0; i < MAX_COMMENTS_LENGTH; i++) {
+      fragment.appendChild(getComments(photoComments.comments[i]));
+    }
+    // photoComments.comments.forEach(function (item) {
+    //   fragment.appendChild(getComments(item));
+    // });
     return commentsList.appendChild(fragment);
   };
 
@@ -39,9 +44,9 @@
     }
   };
 
-  var onOpenPictureClick = function (evt, index) {
+  var onOpenPictureClick = function (evt, index, array) {
     evt.preventDefault();
-    renderBigPicture(window.data.descriptionsArr[index]);
+    renderBigPicture(array[index]);
     bigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
@@ -55,11 +60,11 @@
 
   var pictureCloseButton = bigPicture.querySelector('.cancel');
 
-  var chooseBigPicture = function (pictureItem) {
-    pictureItem.forEach(function (item, index) {
+  var chooseBigPicture = function (collection, array) {
+    collection.forEach(function (item, index) {
       item.addEventListener('click', function (evt) {
         evt.preventDefault();
-        onOpenPictureClick(evt, index);
+        onOpenPictureClick(evt, index, array);
       });
     });
   };
