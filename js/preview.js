@@ -1,9 +1,12 @@
 'use strict';
 
 (function () {
+  var MAX_COMMENTS_COUNT = 5;
+
   var bigPicture = document.querySelector('.big-picture');
   var commentsList = document.querySelector('.social__comments');
   var commentItem = commentsList.querySelector('.social__comment');
+  // var showMoreCommentsBtn = bigPicture.querySelector('.comments-loader');
 
   var getComments = function (photo) {
     var comment = commentItem.cloneNode(true);
@@ -13,12 +16,36 @@
     return comment;
   };
 
+  var commentsCount = 0;
+
+  var getCommentsCount = function (fragment, item) {
+    if (item.comments.length < MAX_COMMENTS_COUNT) {
+      commentsCount = item.comments.length;
+    } else {
+      commentsCount = MAX_COMMENTS_COUNT;
+    }
+    for (var i = 0; i < commentsCount; i++) {
+      fragment.appendChild(getComments(item.comments[i]));
+    }
+
+
+    // showMoreCommentsBtn.addEventListener('click', function () {
+    //   if ((item.comments.length - MAX_COMMENTS_COUNT) > 5) {
+    //     MAX_COMMENTS_COUNT += 5;
+    //     console.log(MAX_COMMENTS_COUNT + ' - 5 комментов добавилось, потому что больше 5');
+    //   } else if ((item.comments.length - MAX_COMMENTS_COUNT) < 5) {
+    //     MAX_COMMENTS_COUNT = item.comments.length;
+    //     console.log(MAX_COMMENTS_COUNT + ' - остатки комментов добавились, потому что меньше 5');
+    //   }
+    // });
+
+    return fragment;
+  };
+
   var makeComments = function (photoComments) {
     commentsList.innerHTML = '';
     var fragment = document.createDocumentFragment();
-    photoComments.comments.forEach(function (item) {
-      fragment.appendChild(getComments(item));
-    });
+    getCommentsCount(fragment, photoComments);
     return commentsList.appendChild(fragment);
   };
 
@@ -48,6 +75,7 @@
     bigPicture.classList.add('hidden');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onEscapeKeydown);
+    commentsCount = MAX_COMMENTS_COUNT;
   };
 
   var pictureCloseButton = bigPicture.querySelector('.cancel');
