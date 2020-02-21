@@ -27,18 +27,6 @@
     for (var i = 0; i < commentsCount; i++) {
       fragment.appendChild(getComments(item.comments[i]));
     }
-
-
-    // showMoreCommentsBtn.addEventListener('click', function () {
-    //   if ((item.comments.length - MAX_COMMENTS_COUNT) > 5) {
-    //     MAX_COMMENTS_COUNT += 5;
-    //     console.log(MAX_COMMENTS_COUNT + ' - 5 комментов добавилось, потому что больше 5');
-    //   } else if ((item.comments.length - MAX_COMMENTS_COUNT) < 5) {
-    //     MAX_COMMENTS_COUNT = item.comments.length;
-    //     console.log(MAX_COMMENTS_COUNT + ' - остатки комментов добавились, потому что меньше 5');
-    //   }
-    // });
-
     return fragment;
   };
 
@@ -63,12 +51,41 @@
     }
   };
 
+  // var funcfuncfunc = function (item) {
+  //   commentsList.innerHTML = '';
+  //   var fragment = document.createDocumentFragment();
+  //
+  //   console.log('Открылась фотка - ' + item.url);
+  //
+  //   if ((item.comments.length - commentsCount) > MAX_COMMENTS_COUNT) {
+  //     commentsCount += MAX_COMMENTS_COUNT;
+  //
+  //     for (var i = 0; i < commentsCount; i++) {
+  //       fragment.appendChild(getComments(item.comments[i]));
+  //     }
+  //
+  //     console.log(commentsCount + ' - 5 комментов добавилось, потому что больше 5');
+  //   } else if ((item.comments.length - commentsCount) < MAX_COMMENTS_COUNT) {
+  //     commentsCount = item.comments.length;
+  //
+  //     for (var i = 0; i < commentsCount; i++) {
+  //       fragment.appendChild(getComments(item.comments[i]));
+  //     }
+  //
+  //     console.log(commentsCount + ' - остатки комментов добавились, потому что меньше 5');
+  //   }
+  //   commentsList.appendChild(fragment);
+  // };
+
   var onOpenPictureClick = function (evt, index, array) {
     evt.preventDefault();
     renderBigPicture(array[index]);
     bigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
+    // showMoreCommentsBtn.addEventListener('click', function () {
+    //   funcfuncfunc(array[index]);
+    // });
   };
 
   var onClosePictureClick = function () {
