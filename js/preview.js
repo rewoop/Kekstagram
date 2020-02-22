@@ -18,12 +18,8 @@
 
   var commentsCount = 0;
 
-  var getCommentsCount = function (fragment, item) {
-    if (item.comments.length < MAX_COMMENTS_COUNT) {
-      commentsCount = item.comments.length;
-    } else {
-      commentsCount = MAX_COMMENTS_COUNT;
-    }
+  var makeFirstComments = function (fragment, item) {
+    commentsCount = Math.min(item.comments.length, MAX_COMMENTS_COUNT);
     for (var i = 0; i < commentsCount; i++) {
       fragment.appendChild(getComments(item.comments[i]));
     }
@@ -33,7 +29,7 @@
   var makeComments = function (photoComments) {
     commentsList.innerHTML = '';
     var fragment = document.createDocumentFragment();
-    getCommentsCount(fragment, photoComments);
+    makeFirstComments(fragment, photoComments);
     return commentsList.appendChild(fragment);
   };
 
