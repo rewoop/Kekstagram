@@ -6,7 +6,7 @@
   var bigPicture = document.querySelector('.big-picture');
   var commentsList = document.querySelector('.social__comments');
   var commentItem = commentsList.querySelector('.social__comment');
-  // var showMoreCommentsBtn = bigPicture.querySelector('.comments-loader');
+  var showMoreCommentsBtn = bigPicture.querySelector('.comments-loader');
 
   var getComments = function (photo) {
     var comment = commentItem.cloneNode(true);
@@ -51,41 +51,41 @@
     }
   };
 
-  // var funcfuncfunc = function (item) {
-  //   commentsList.innerHTML = '';
-  //   var fragment = document.createDocumentFragment();
-  //
-  //   console.log('Открылась фотка - ' + item.url);
-  //
-  //   if ((item.comments.length - commentsCount) > MAX_COMMENTS_COUNT) {
-  //     commentsCount += MAX_COMMENTS_COUNT;
-  //
-  //     for (var i = 0; i < commentsCount; i++) {
-  //       fragment.appendChild(getComments(item.comments[i]));
-  //     }
-  //
-  //     console.log(commentsCount + ' - 5 комментов добавилось, потому что больше 5');
-  //   } else if ((item.comments.length - commentsCount) < MAX_COMMENTS_COUNT) {
-  //     commentsCount = item.comments.length;
-  //
-  //     for (var i = 0; i < commentsCount; i++) {
-  //       fragment.appendChild(getComments(item.comments[i]));
-  //     }
-  //
-  //     console.log(commentsCount + ' - остатки комментов добавились, потому что меньше 5');
-  //   }
-  //   commentsList.appendChild(fragment);
-  // };
+  var funcfuncfunc = function (item) {
+    commentsList.innerHTML = '';
+    var fragment = document.createDocumentFragment();
 
-  var onOpenPictureClick = function (evt, index, array) {
+    // console.log('Открылась фотка - ' + item.url);
+
+    if ((item.comments.length - commentsCount) > MAX_COMMENTS_COUNT) {
+      commentsCount += MAX_COMMENTS_COUNT;
+
+      for (var i = 0; i < commentsCount; i++) {
+        fragment.appendChild(getComments(item.comments[i]));
+      }
+
+      // console.log(commentsCount + ' - 5 комментов добавилось, потому что больше 5');
+    } else if ((item.comments.length - commentsCount) < MAX_COMMENTS_COUNT) {
+      commentsCount = item.comments.length;
+
+      for (var j = 0; j < commentsCount; j++) {
+        fragment.appendChild(getComments(item.comments[j]));
+      }
+
+      // console.log(commentsCount + ' - остатки комментов добавились, потому что меньше 5');
+    }
+    return commentsList.appendChild(fragment);
+  };
+
+  var onOpenPictureClick = function (evt, item) {
     evt.preventDefault();
-    renderBigPicture(array[index]);
+    renderBigPicture(item);
     bigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
-    // showMoreCommentsBtn.addEventListener('click', function () {
-    //   funcfuncfunc(array[index]);
-    // });
+    showMoreCommentsBtn.addEventListener('click', function () {
+      funcfuncfunc(item);
+    });
   };
 
   var onClosePictureClick = function () {
@@ -101,7 +101,7 @@
     collection.forEach(function (item, index) {
       item.addEventListener('click', function (evt) {
         evt.preventDefault();
-        onOpenPictureClick(evt, index, array);
+        onOpenPictureClick(evt, array[index]);
       });
     });
   };
