@@ -17,9 +17,14 @@
   };
 
   var commentsCount = 0;
+  var currentPicture = {};
 
   var makeFirstComments = function (fragment, item) {
     commentsCount = Math.min(item.comments.length, MAX_COMMENTS_COUNT);
+    showMoreCommentsBtn.classList.remove('hidden');
+    if (item.comments.length < MAX_COMMENTS_COUNT) {
+      showMoreCommentsBtn.classList.add('hidden');
+    }
     for (var i = 0; i < commentsCount; i++) {
       fragment.appendChild(getComments(item.comments[i]));
     }
@@ -49,11 +54,27 @@
 
   var onShowMoreBtnClick = function (item) {
     commentsList.innerHTML = '';
+    var fragment = document.createDocumentFragment();
 
-    var array = [];
+    if ((item.comments.length - commentsCount) > MAX_COMMENTS_COUNT) {
+      commentsCount += MAX_COMMENTS_COUNT;
 
-    console.log(commentsCount + );
+      for (var i = 0; i < commentsCount; i++) {
+        fragment.appendChild(getComments(item.comments[i]));
+      }
+    } else if ((item.comments.length - commentsCount) <= MAX_COMMENTS_COUNT) {
+      commentsCount = item.comments.length;
+      showMoreCommentsBtn.classList.add('hidden');
 
+      for (var j = 0; j < commentsCount; j++) {
+        fragment.appendChild(getComments(item.comments[j]));
+      }
+    }
+    return commentsList.appendChild(fragment);
+  };
+
+  var onAddOrRemoveClick = function () {
+    onShowMoreBtnClick(currentPicture);
   };
 
   var onOpenPictureClick = function (evt, item) {
@@ -62,9 +83,8 @@
     bigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
-    showMoreCommentsBtn.addEventListener('click', function () {
-      onShowMoreBtnClick(item);
-    });
+    currentPicture = item;
+    showMoreCommentsBtn.addEventListener('click', onAddOrRemoveClick);
   };
 
   var onClosePictureClick = function () {
@@ -72,6 +92,7 @@
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onEscapeKeydown);
     commentsCount = MAX_COMMENTS_COUNT;
+    showMoreCommentsBtn.removeEventListener('click', onAddOrRemoveClick);
   };
 
   var pictureCloseButton = bigPicture.querySelector('.cancel');
