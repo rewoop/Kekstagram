@@ -47,30 +47,13 @@
     }
   };
 
-  var funcfuncfunc = function (item) {
+  var onShowMoreBtnClick = function (item) {
     commentsList.innerHTML = '';
-    var fragment = document.createDocumentFragment();
 
-    // console.log('Открылась фотка - ' + item.url);
+    var array = [];
 
-    if ((item.comments.length - commentsCount) > MAX_COMMENTS_COUNT) {
-      commentsCount += MAX_COMMENTS_COUNT;
+    console.log(commentsCount + );
 
-      for (var i = 0; i < commentsCount; i++) {
-        fragment.appendChild(getComments(item.comments[i]));
-      }
-
-      // console.log(commentsCount + ' - 5 комментов добавилось, потому что больше 5');
-    } else if ((item.comments.length - commentsCount) < MAX_COMMENTS_COUNT) {
-      commentsCount = item.comments.length;
-
-      for (var j = 0; j < commentsCount; j++) {
-        fragment.appendChild(getComments(item.comments[j]));
-      }
-
-      // console.log(commentsCount + ' - остатки комментов добавились, потому что меньше 5');
-    }
-    return commentsList.appendChild(fragment);
   };
 
   var onOpenPictureClick = function (evt, item) {
@@ -80,7 +63,7 @@
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
     showMoreCommentsBtn.addEventListener('click', function () {
-      funcfuncfunc(item);
+      onShowMoreBtnClick(item);
     });
   };
 
