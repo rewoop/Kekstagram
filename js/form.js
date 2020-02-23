@@ -11,6 +11,7 @@
   var scaleValue = document.querySelector('.scale__control--value');
   var pictureDiv = document.querySelector('.img-upload__preview');
   var image = pictureDiv.querySelector('img');
+  var filtersPreview = document.querySelectorAll('.effects__preview');
   var filters = document.querySelectorAll('.effects__item');
   var radioFilters = document.querySelectorAll('.effects__radio');
   var effectLevel = document.querySelector('.effect-level');
@@ -25,6 +26,13 @@
   var successBtn = successMessage.querySelector('.success__button');
   var errorMessage = window.gallery.errorPopup;
   var errorBtn = window.gallery.errorBtn;
+
+  var defaultPreviewAndFiltersPreview = function () {
+    image.src = 'img/upload-default-image.jpg';
+    filtersPreview.forEach(function (item) {
+      item.style = '';
+    });
+  };
 
   var onEscapePictureOverlayKeydown = function (evt) {
     if (evt.key === window.constants.ESC_KEY) {
@@ -44,6 +52,7 @@
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onEscapePictureOverlayKeydown);
     uploadFile.value = '';
+    defaultPreviewAndFiltersPreview();
   };
 
   var resetFilterAndScale = function () {
@@ -194,6 +203,7 @@
     evt.preventDefault();
     window.backend.save(new FormData(form), function () {
       resetData();
+      defaultPreviewAndFiltersPreview();
       main.appendChild(successMessage);
       successBtn.addEventListener('click', function () {
         main.removeChild(successMessage);
@@ -202,6 +212,7 @@
     }, function () {
       imgUploadOverlay.classList.add('hidden');
       resetData();
+      defaultPreviewAndFiltersPreview();
       main.appendChild(errorMessage);
       errorBtn.addEventListener('click', function () {
         main.removeChild(errorMessage);
@@ -213,6 +224,8 @@
   window.form = {
     onEscapePictureOverlayKeydown: onEscapePictureOverlayKeydown,
     getFilterValue: getFilterValue,
-    image: image
+    image: image,
+    uploadFile: uploadFile,
+    filtersPreview: filtersPreview
   };
 })();
