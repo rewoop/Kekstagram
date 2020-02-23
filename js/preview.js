@@ -1,9 +1,12 @@
 'use strict';
 
 (function () {
+  var MAX_COMMENTS_COUNT = 5;
+
   var bigPicture = document.querySelector('.big-picture');
   var commentsList = document.querySelector('.social__comments');
   var commentItem = commentsList.querySelector('.social__comment');
+  var showMoreCommentsBtn = bigPicture.querySelector('.comments-loader');
 
   var getComments = function (photo) {
     var comment = commentItem.cloneNode(true);
@@ -13,12 +16,25 @@
     return comment;
   };
 
+  var commentsCount = 0;
+  var currentPicture = {};
+
+  var makeFirstComments = function (fragment, item) {
+    commentsCount = Math.min(item.comments.length, MAX_COMMENTS_COUNT);
+    showMoreCommentsBtn.classList.remove('hidden');
+    if (item.comments.length < MAX_COMMENTS_COUNT) {
+      showMoreCommentsBtn.classList.add('hidden');
+    }
+    for (var i = 0; i < commentsCount; i++) {
+      fragment.appendChild(getComments(item.comments[i]));
+    }
+    return fragment;
+  };
+
   var makeComments = function (photoComments) {
     commentsList.innerHTML = '';
     var fragment = document.createDocumentFragment();
-    photoComments.comments.forEach(function (item) {
-      fragment.appendChild(getComments(item));
-    });
+    makeFirstComments(fragment, photoComments);
     return commentsList.appendChild(fragment);
   };
 
@@ -30,36 +46,62 @@
     bigPicture.querySelector('.social__caption').textContent = picturesArray.description;
   };
 
-  bigPicture.querySelector('.social__comment-count').classList.add('hidden');
-  bigPicture.querySelector('.comments-loader').classList.add('hidden');
-
   var onEscapeKeydown = function (evt) {
     if (evt.key === window.constants.ESC_KEY) {
       onClosePictureClick();
     }
   };
 
-  var onOpenPictureClick = function (evt, index) {
+  var onShowMoreBtnClick = function (item) {
+    commentsList.innerHTML = '';
+    var fragment = document.createDocumentFragment();
+
+    if ((item.comments.length - commentsCount) > MAX_COMMENTS_COUNT) {
+      commentsCount += MAX_COMMENTS_COUNT;
+
+      for (var i = 0; i < commentsCount; i++) {
+        fragment.appendChild(getComments(item.comments[i]));
+      }
+    } else if ((item.comments.length - commentsCount) <= MAX_COMMENTS_COUNT) {
+      commentsCount = item.comments.length;
+      showMoreCommentsBtn.classList.add('hidden');
+
+      for (var j = 0; j < commentsCount; j++) {
+        fragment.appendChild(getComments(item.comments[j]));
+      }
+    }
+    return commentsList.appendChild(fragment);
+  };
+
+  var onAddOrRemoveClick = function () {
+    onShowMoreBtnClick(currentPicture);
+  };
+
+  var onOpenPictureClick = function (evt, item) {
     evt.preventDefault();
-    renderBigPicture(window.data.descriptionsArr[index]);
+    renderBigPicture(item);
     bigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
+    currentPicture = item;
+    showMoreCommentsBtn.addEventListener('click', onAddOrRemoveClick);
   };
 
   var onClosePictureClick = function () {
     bigPicture.classList.add('hidden');
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onEscapeKeydown);
+    commentsCount = MAX_COMMENTS_COUNT;
+    showMoreCommentsBtn.removeEventListener('click', onAddOrRemoveClick);
   };
 
   var pictureCloseButton = bigPicture.querySelector('.cancel');
 
-  var chooseBigPicture = function (pictureItem) {
-    pictureItem.forEach(function (item, index) {
+  var chooseBigPicture = function (collection, array) {
+    collection.forEach(function (item, index) {
       item.addEventListener('click', function (evt) {
         evt.preventDefault();
-        onOpenPictureClick(evt, index);
+        onOpenPictureClick(evt, array[index]);
       });
     });
   };
