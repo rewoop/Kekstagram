@@ -3,10 +3,15 @@
 (function () {
   var MAX_COMMENTS_COUNT = 5;
 
+  var commentsCount = 0;
+  var currentPicture = {};
+
   var bigPicture = document.querySelector('.big-picture');
   var commentsList = document.querySelector('.social__comments');
   var commentItem = commentsList.querySelector('.social__comment');
   var showMoreCommentsBtn = bigPicture.querySelector('.comments-loader');
+  var currentCommentsCount = bigPicture.querySelector('.social__comment-count');
+  var allCommentsCount = bigPicture.querySelector('.comments-count');
 
   var getComments = function (photo) {
     var comment = commentItem.cloneNode(true);
@@ -15,9 +20,6 @@
     comment.querySelector('.social__text').textContent = photo.message;
     return comment;
   };
-
-  var commentsCount = 0;
-  var currentPicture = {};
 
   var makeFirstComments = function (fragment, item) {
     commentsCount = Math.min(item.comments.length, MAX_COMMENTS_COUNT);
@@ -28,6 +30,7 @@
     for (var i = 0; i < commentsCount; i++) {
       fragment.appendChild(getComments(item.comments[i]));
     }
+    currentCommentsCount.textContent = commentsCount + ' из ' + allCommentsCount.textContent + ' комментариев';
     return fragment;
   };
 
@@ -41,7 +44,7 @@
   var renderBigPicture = function (picturesArray) {
     bigPicture.querySelector('img').src = picturesArray.url;
     bigPicture.querySelector('.likes-count').textContent = picturesArray.likes;
-    bigPicture.querySelector('.comments-count').textContent = picturesArray.comments.length;
+    allCommentsCount.textContent = picturesArray.comments.length;
     makeComments(picturesArray);
     bigPicture.querySelector('.social__caption').textContent = picturesArray.description;
   };
@@ -75,6 +78,7 @@
 
   var onAddOrRemoveClick = function () {
     onShowMoreBtnClick(currentPicture);
+    currentCommentsCount.textContent = commentsCount + ' из ' + allCommentsCount.textContent + ' комментариев';
   };
 
   var onOpenPictureClick = function (evt, item) {

@@ -27,7 +27,7 @@
   var errorMessage = window.gallery.errorPopup;
   var errorBtn = window.gallery.errorBtn;
 
-  var defaultPreviewAndFiltersPreview = function () {
+  var setDefaultPreviewAndFiltersPreview = function () {
     image.src = 'img/upload-default-image.jpg';
     filtersPreview.forEach(function (item) {
       item.style = '';
@@ -52,7 +52,7 @@
     document.body.classList.remove('modal-open');
     document.removeEventListener('keydown', onEscapePictureOverlayKeydown);
     uploadFile.value = '';
-    defaultPreviewAndFiltersPreview();
+    setDefaultPreviewAndFiltersPreview();
   };
 
   var resetFilterAndScale = function () {
@@ -203,7 +203,7 @@
     evt.preventDefault();
     window.backend.save(new FormData(form), function () {
       resetData();
-      defaultPreviewAndFiltersPreview();
+      setDefaultPreviewAndFiltersPreview();
       main.appendChild(successMessage);
       successBtn.addEventListener('click', function () {
         main.removeChild(successMessage);
@@ -212,7 +212,7 @@
     }, function () {
       imgUploadOverlay.classList.add('hidden');
       resetData();
-      defaultPreviewAndFiltersPreview();
+      setDefaultPreviewAndFiltersPreview();
       main.appendChild(errorMessage);
       errorBtn.addEventListener('click', function () {
         main.removeChild(errorMessage);
