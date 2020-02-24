@@ -55,11 +55,15 @@
     setDefaultPreviewAndFiltersPreview();
   };
 
+  var currentFilter = '';
+
   var resetFilterAndScale = function () {
     scaleValue.value = window.constants.DEFAULT_SCALE_VALUE;
     image.style.transform = 'scale(' + (parseInt(scaleValue.value, window.constants.RADIX) / window.constants.DEFAULT_FACTOR) + ')';
     image.style.filter = '';
-    image.classList.remove('effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+    if (currentFilter) {
+      image.classList.remove(currentFilter);
+    }
     effectLevel.classList.add('hidden');
     hashtag.style.border = '';
     radioFilters[0].checked = 'checked';
@@ -81,7 +85,9 @@
   };
 
   var removeFilters = function () {
-    image.classList.remove('effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+    if (currentFilter) {
+      image.classList.remove(currentFilter);
+    }
     image.style.filter = '';
   };
 
@@ -96,26 +102,31 @@
         } else if (radioFilters[1].checked) {
           effectLevel.classList.remove('hidden');
           removeFilters();
+          currentFilter = 'effects__preview--chrome';
           image.classList.add('effects__preview--chrome');
           image.style.filter = 'grayscale(' + window.constants.DEFAULT_PIN_VALUE + ')';
         } else if (radioFilters[2].checked) {
           effectLevel.classList.remove('hidden');
           removeFilters();
+          currentFilter = 'effects__preview--sepia';
           image.classList.add('effects__preview--sepia');
           image.style.filter = 'sepia(' + window.constants.DEFAULT_PIN_VALUE + ')';
         } else if (radioFilters[3].checked) {
           effectLevel.classList.remove('hidden');
           removeFilters();
+          currentFilter = 'effects__preview--marvin';
           image.classList.add('effects__preview--marvin');
           image.style.filter = 'invert(' + (window.constants.DEFAULT_PIN_VALUE * window.constants.DEFAULT_FACTOR) + '%)';
         } else if (radioFilters[4].checked) {
           effectLevel.classList.remove('hidden');
           removeFilters();
+          currentFilter = 'effects__preview--phobos';
           image.classList.add('effects__preview--phobos');
           image.style.filter = 'blur(' + getPinValueRange(window.constants.DEFAULT_PIN_VALUE, BLUR_MIN_VALUE, BLUR_AND_BRIGHTNESS_MAX_VALUE) + 'px)';
         } else if (radioFilters[5].checked) {
           effectLevel.classList.remove('hidden');
           removeFilters();
+          currentFilter = 'effects__preview--heat';
           image.classList.add('effects__preview--heat');
           image.style.filter = 'brightness(' + getPinValueRange(window.constants.DEFAULT_PIN_VALUE, BRIGHTNESS_MIN_VALUE, BLUR_AND_BRIGHTNESS_MAX_VALUE) + ')';
         }
@@ -151,52 +162,44 @@
     uploadFile.value = '';
   };
 
-  var onEscapeSuccessMessageKeydown = function (evt) {
-    checkSuccessMessage();
-    if (evt.key === window.constants.ESC_KEY) {
-      main.removeChild(successMessage);
-    }
-  };
-
-  var onOverlaySuccessMessageClick = function (evt) {
-    checkSuccessMessage();
-    if (!(successMessage.querySelector('.success__inner') === evt.target)) {
-      main.removeChild(successMessage);
-    }
-  };
-
   var checkSuccessMessage = function () {
-    if (main.contains(successMessage)) {
-      document.addEventListener('keydown', onEscapeSuccessMessageKeydown);
-      document.addEventListener('click', onOverlaySuccessMessageClick);
-    } else if (!(main.contains(successMessage))) {
-      document.removeEventListener('keydown', onEscapeSuccessMessageKeydown);
-      document.removeEventListener('click', onOverlaySuccessMessageClick);
-    }
-  };
+    successBtn.addEventListener('click', function () {
+      if (main.contains(successMessage)) {
+        main.removeChild(successMessage);
+      }
+    });
 
-  var onEscapeErrorMessageKeydown = function (evt) {
-    checkErrorMessage();
-    if (evt.key === window.constants.ESC_KEY) {
-      main.removeChild(errorMessage);
-    }
-  };
+    document.addEventListener('keydown', function (evt) {
+      if (main.contains(successMessage) && evt.key === window.constants.ESC_KEY) {
+        main.removeChild(successMessage);
+      }
+    });
 
-  var onOverlayErrorMessageClick = function (evt) {
-    checkErrorMessage();
-    if (!(errorMessage.querySelector('.error__inner') === evt.target)) {
-      main.removeChild(errorMessage);
-    }
+    document.addEventListener('click', function (evt) {
+      if (main.contains(successMessage) && successMessage.querySelector('.success__inner') !== evt.target) {
+        main.removeChild(successMessage);
+      }
+    });
   };
 
   var checkErrorMessage = function () {
-    if (main.contains(errorMessage)) {
-      document.addEventListener('keydown', onEscapeErrorMessageKeydown);
-      document.addEventListener('click', onOverlayErrorMessageClick);
-    } else if (!(main.contains(errorMessage))) {
-      document.removeEventListener('keydown', onEscapeErrorMessageKeydown);
-      document.removeEventListener('click', onOverlayErrorMessageClick);
-    }
+    errorBtn.addEventListener('click', function () {
+      if (main.contains(errorMessage)) {
+        main.removeChild(errorMessage);
+      }
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      if (main.contains(errorMessage) && evt.key === window.constants.ESC_KEY) {
+        main.removeChild(errorMessage);
+      }
+    });
+
+    document.addEventListener('click', function (evt) {
+      if (main.contains(errorMessage) && errorMessage.querySelector('.error__inner') !== evt.target) {
+        main.removeChild(errorMessage);
+      }
+    });
   };
 
   form.addEventListener('submit', function (evt) {
@@ -205,18 +208,12 @@
       resetData();
       setDefaultPreviewAndFiltersPreview();
       main.appendChild(successMessage);
-      successBtn.addEventListener('click', function () {
-        main.removeChild(successMessage);
-      });
       checkSuccessMessage();
     }, function () {
       imgUploadOverlay.classList.add('hidden');
       resetData();
       setDefaultPreviewAndFiltersPreview();
       main.appendChild(errorMessage);
-      errorBtn.addEventListener('click', function () {
-        main.removeChild(errorMessage);
-      });
       checkErrorMessage();
     });
   });
