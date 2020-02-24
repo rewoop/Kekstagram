@@ -223,6 +223,8 @@
     getFilterValue: getFilterValue,
     image: image,
     uploadFile: uploadFile,
-    filtersPreview: filtersPreview
+    filtersPreview: filtersPreview,
+    checkErrorMessage: checkErrorMessage,
+    imgUploadOverlay: imgUploadOverlay
   };
 })();

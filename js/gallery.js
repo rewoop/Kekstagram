@@ -119,6 +119,7 @@
     picturesContainer: picturesContainer,
     main: main,
     errorPopup: errorPopup,
-    errorBtn: errorBtn
+    errorBtn: errorBtn,
+    errorTitle: errorTitle
   };
 })();
