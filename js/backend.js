@@ -7,6 +7,7 @@
     OK: 200
   };
   var TIMEOUT_IN_MS = 10000;
+  var RESPONSE_TYPE = 'json';
 
   var loadAndErrorHandlers = function (request, load, error) {
     request.addEventListener('load', function () {
@@ -28,7 +29,7 @@
 
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
+    xhr.responseType = RESPONSE_TYPE;
 
     loadAndErrorHandlers(xhr, onLoad, onError);
 
@@ -38,7 +39,7 @@
 
   var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
+    xhr.responseType = RESPONSE_TYPE;
 
     loadAndErrorHandlers(xhr, onLoad, onError);
 

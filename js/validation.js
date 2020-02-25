@@ -24,12 +24,11 @@
 
   var validateHashtag = function () {
     hashtagInput.addEventListener('change', function () {
-      hashtagsArr = stringToArray(hashtagInput.value, SPACE_HASHTAG_SEPARATOR);
+      hashtagsArr = stringToArray(hashtagInput.value.toLowerCase(), SPACE_HASHTAG_SEPARATOR);
       hashtagsArr.forEach(function (item) {
         var isHashtagValid = REG_EXP.test(item);
         var isHashtagHaveSymbols = REG_EXP_SYMBOLS.test(item);
         var isLatticeDuplicated = REG_EXP_SYMBOL_LATTICE.test(item.substring(1));
-        item = item.toLowerCase();
         var isHashtagDuplicated = checkHashtagsArrayDuplicate(hashtagsArr);
 
         if (isHashtagHaveSymbols || isLatticeDuplicated) {
