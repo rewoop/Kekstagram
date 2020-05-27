@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var URL_POST = 'https://js.dump.academy/kekstagram';
-  var URL_GET = 'https://js.dump.academy/kekstagram/data';
+  var URL_POST = 'https://javascript.pages.academy/kekstagram';
+  var URL_GET = 'https://javascript.pages.academy/kekstagram/data';
   var StatusCode = {
     OK: 200
   };
