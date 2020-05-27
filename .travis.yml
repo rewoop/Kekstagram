@@ -5,3 +5,14 @@ node_js:
 
 notifications:
   email: false
+
+cache:
+  directories:
+  - node_modules
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github-token: $travis
+  on:
+    branch: master
