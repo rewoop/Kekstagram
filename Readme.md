@@ -50,3 +50,4 @@ git clone SSH-адрес_вашего_форка
 
 [travis-image]: https://travis-ci.com/htmlacademy-javascript/1164987-kekstagram-19.svg?branch=master
 [travis-url]: https://travis-ci.com/htmlacademy-javascript/1164987-kekstagram-19
+
